@@ -16,7 +16,7 @@ const FavoritosSlice = createSlice({
     favoritar: (state, action: PayloadAction<Produto>) => {
       const produto = action.payload
       if (state.itens.find((p) => p.id === produto.id)) {
-        alert('Item duplicado')
+        state.itens.splice(state.itens.indexOf(produto), 1)
       } else {
         state.itens.push(produto)
       }

@@ -1,14 +1,14 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import * as S from './styles'
 
 import { Produto as ProdutoType } from '../../App'
 import { adicionar } from '../../store/reducers/carrinho'
 import { favoritar } from '../../store/reducers/favoritos'
+import { RootReducer } from '../../store'
 
 type Props = {
   produto: ProdutoType
-  estaNosFavoritos: boolean
 }
 
 export const paraReal = (valor: number) =>
@@ -16,8 +16,20 @@ export const paraReal = (valor: number) =>
     valor
   )
 
-const ProdutoComponent = ({ produto, estaNosFavoritos }: Props) => {
+const ProdutoComponent = ({ produto }: Props) => {
   const dispatch = useDispatch()
+
+  const favoritos = useSelector((state: RootReducer) => state.favoritos.itens)
+
+  const produtoEstaNosFavoritos = (produto: ProdutoType) => {
+    const produtoId = produto.id
+    const IdsDosFavoritos = favoritos?.map((f) => f.id)
+
+    return IdsDosFavoritos?.includes(produtoId)
+  }
+
+  const estaNosFavoritos: boolean = produtoEstaNosFavoritos(produto)
+
   return (
     <S.Produto>
       <S.Capa>
